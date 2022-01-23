@@ -1,8 +1,7 @@
 from pickle import TRUE
 import discord
 from discord.ext import commands
-from discord import FFmpegPCMAudio
-from discord import opus
+from discord import FFmpegOpusAudio
 
 import os
 from dotenv import load_dotenv
@@ -19,8 +18,7 @@ SONG = os.getenv("SONG")
 
 
 
-intents = discord.Intents.default()
-intents.members = True
+intents = discord.Intents.all()
 
 client = commands.Bot(command_prefix = COMMAND_PREFIX, intents=intents)
 
@@ -54,13 +52,8 @@ async def on_voice_state_update(member, before, after):
     if member_count > 0 and not client.is_playing:
         client.is_playing = True
         voice = await voice_channel.connect()
-        source = FFmpegPCMAudio('Drama.mp3')
-
-        print("before playing")
+        source = FFmpegOpusAudio(SONG)
         audio_player = voice.play(source)
-
-
-        
         print("starting music . . .")
         await welcome_channel.send("START")
         # await voice_channel.connect()
