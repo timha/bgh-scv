@@ -1,6 +1,8 @@
 from pickle import TRUE
 import discord
 from discord.ext import commands
+from discord import FFmpegPCMAudio
+from discord import opus
 
 import os
 from dotenv import load_dotenv
@@ -12,6 +14,7 @@ COMMAND_PREFIX = os.getenv("COMMAND_PREFIX")
 CH_WELCOME = os.getenv("CH_WELCOME")
 CH_LOUNGE = os.getenv("CH_LOUNGE")
 GUILD_ID = os.getenv("GUILD_ID")
+SONG = os.getenv("SONG")
 
 
 
@@ -48,17 +51,28 @@ async def on_voice_state_update(member, before, after):
     voice_channel = client.get_channel(int(CH_LOUNGE))
     welcome_channel = client.get_channel(int(CH_WELCOME))
     member_count = len(voice_channel.members)
-
     if member_count > 0 and not client.is_playing:
         client.is_playing = True
+        voice = await voice_channel.connect()
+        source = FFmpegPCMAudio('./audio/Drama.mp3')
+
+        print("before playing")
+        audio_player = voice.play(source)
+
+
+        
         print("starting music . . .")
         await welcome_channel.send("START")
-        await voice_channel.connect()
+        # await voice_channel.connect()
     elif member_count == 1 and client.is_playing:
+        await client.get_guild(int(GUILD_ID)).voice_client.disconnect()
+
+
+
+
         client.is_playing = False
         print("stopping music . . .")
         await welcome_channel.send("STOP")
-        await client.get_guild(int(GUILD_ID)).voice_client.disconnect()
 
 
 client.run(BOT_TOKEN)
