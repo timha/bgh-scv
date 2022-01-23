@@ -1,3 +1,4 @@
+from pickle import TRUE
 import discord
 from discord.ext import commands
 
@@ -9,13 +10,18 @@ load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 COMMAND_PREFIX = os.getenv("COMMAND_PREFIX")
 CH_WELCOME = os.getenv("CH_WELCOME")
+CH_LOUNGE = os.getenv("CH_LOUNGE")
+
+
+
+
 
 intents = discord.Intents.default()
 intents.members = True
 
-# set command prefix
 client = commands.Bot(command_prefix = COMMAND_PREFIX, intents=intents)
 
+client.is_playing = False
 
 @client.event
 async def on_ready():
@@ -34,6 +40,21 @@ async def on_member_join(member):
     print("----------------------------------")
     channel = client.get_channel(int(CH_WELCOME))
     await channel.send("Welcome to Big Game Hunters, " + str(member.name) + "!")
+
+@client.event
+async def on_voice_state_update(member, before, after):
+    voice_channel = client.get_channel(int(CH_LOUNGE))
+    welcome_channel = client.get_channel(int(CH_WELCOME))
+    member_count = len(voice_channel.members)
+    
+    if member_count > 0 and not client.is_playing:
+        client.is_playing = True
+        print("starting music . . .")
+        await welcome_channel.send("START")
+    elif member_count == 0 and client.is_playing:
+        client.is_playing = False
+        print("stopping music . . .")
+        await welcome_channel.send("STOP")
 
 
 client.run(BOT_TOKEN)
