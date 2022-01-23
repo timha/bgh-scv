@@ -1,8 +1,8 @@
 # Start bot
 
-screen python3 main.py & 
+screen -d -m -S session_name python3 your_bot.py
 
 ## Screen commands
 screen -list
 
-screen -r <pid> 
+screen -r sesion_name
