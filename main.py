@@ -54,7 +54,7 @@ async def on_voice_state_update(member, before, after):
     if member_count > 0 and not client.is_playing:
         client.is_playing = True
         voice = await voice_channel.connect()
-        source = FFmpegPCMAudio('./audio/Drama.mp3')
+        source = FFmpegPCMAudio('Drama.mp3')
 
         print("before playing")
         audio_player = voice.play(source)
