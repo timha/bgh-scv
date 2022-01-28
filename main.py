@@ -1,4 +1,3 @@
-from ast import alias
 import discord
 from discord.ext import commands
 from discord import FFmpegOpusAudio
@@ -66,8 +65,25 @@ async def on_voice_state_update(member, before, after):
         print("stopping music . . .")
         await welcome_channel.send("STOP")
 
+
+# play
+@client.command(aliases=['1', 'pl'])
+async def play(ctx, arg):
+    # user can do a couple of things
+    # 1. !play
+    #       "what would you like to do?"
+    #       e.g. !play sh/shuffle, !play genre, !play playlist
+    #       "playing random song from entire collection"
+    # 2. !play 
+    print("start playing")
+
+# stop
+@client.command(aliases=['s'])
+async def stop(ctx):
+    print("stop playing")
+
 # pause
-@client.command(aliases=['p'])
+@client.command(aliases=['2', 'p'])
 async def pause(ctx):
     voice = discord.utils.get(client.voice_clients, guild=ctx.guild)
     if voice.is_playing():
@@ -84,6 +100,11 @@ async def resume(ctx):
     else:
         await ctx.send('SCV is already playing tunes')
 
+
+# help command
+@client.command(aliases=['?'])
+async def cmd(ctx):
+    print("help commands")
 
 
 client.run(BOT_TOKEN)
