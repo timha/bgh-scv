@@ -5,4 +5,4 @@ screen -d -m -S session_name python3 your_bot.py
 ## Screen commands
 screen -list
 
-screen -r sesion_name
+screen -r session_name
